@@ -1,0 +1,18 @@
+
+.authorControls {
+  color: blue;
+  width: 18%;
+  padding-right: 2%;
+  float: left;
+
+}
+
+.iframeBox {
+  width: 80%;
+  color: green;
+
+}
+
+.authorButton:hover {
+  color: orange;
+}
