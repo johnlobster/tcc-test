@@ -2,7 +2,7 @@ const express = require("express");
 
 const path = require("path");
 require("dotenv").config(); // add variables in .env file to process.env
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 // check NODE_ENV
 console.log(`server: NODE_ENV ${process.env.NODE_ENV}`);
