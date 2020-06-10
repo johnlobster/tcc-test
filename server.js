@@ -28,7 +28,7 @@ console.log("Original test data " + testData);
 // <repo URL> <my directory> (e.g. github-source)
 
 // clone repo
-if (shell.exec('git clone -b heroku-git-trial https://github.com/johnlobster/tcc-test.git github-repo').code !== 0) {
+if (shell.exec('git clone -b heroku-git-trial https://aa054a46c22ac70db24c7364098154bbb5c0385a@github.com/johnlobster/tcc-test.git github-repo').code !== 0) {
   shell.echo('Error: Git clone failed');
   shell.exit(1);
 } else {
@@ -74,7 +74,13 @@ if (shell.exec(`git commit -m "Auto-commit ${dsString}"`).code !== 0) {
   shell.exit(1);
 }
 
-if (shell.exec('git push https://github.com/johnlobster/tcc-test.git').code !== 0) {
+console.log();
+console.log("config file");
+const cFile = shell.cat(".bit/config");
+console.log(cFile);
+console.log();
+
+if (shell.exec('git push https://aa054a46c22ac70db24c7364098154bbb5c0385a@github.com/johnlobster/tcc-test.git').code !== 0) {
   shell.echo('Error: Git push failed');
   shell.exit(1);
 }
