@@ -24,6 +24,11 @@ console.log("Original test data " + testData);
 let fileName = "t3_" + uniqid();
 fs.writeFileSync(fileName, JSON.stringify(testData));
 
+if (shell.exec('git add ' + fileName).code !== 0) {
+  shell.echo('Error: Git add failed');
+  shell.exit(1);
+}
+
 if (shell.exec('git commit -m "Auto-commit"').code !== 0) {
   shell.echo('Error: Git commit failed');
   shell.exit(1);
