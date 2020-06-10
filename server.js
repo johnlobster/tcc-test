@@ -21,8 +21,6 @@ const testData = {
 }
 console.log("Original test data " + testData);
 
-let fileName = "t3_" + uniqid();
-fs.writeFileSync(fileName, JSON.stringify(testData));
 
 // heroku doesn't leave a git repo, will have to clone
 // -b <branch> checkout just that branch
@@ -41,13 +39,22 @@ let lsArray = shell.ls('github-repo');
 console.log(`${lsArray.length} files in directory`);
 lsArray.forEach( (value, index) => {console.log(value);})
 
-shell.cd("github-repo");
+const cdString = shell.cd("github-repo");
+console.log("Change directory to github-repo ShellString: " + cdString);
+
+let lsArray2 = shell.ls();
+console.log(`${lsArray2.length} files in directory`);
+lsArray2.forEach((value, index) => { console.log(value); })
 
 // check that we are on the right branch
 if (shell.exec('git branch').code !== 0) {
   shell.echo('Error: Git branch failed');
   shell.exit(1);
 }
+
+// create file before adding to git repo
+let fileName = "t3_" + uniqid();
+fs.writeFileSync(fileName, JSON.stringify(testData));
 
 // add explicitly because new file
 if (shell.exec('git add ' + fileName).code !== 0) {
