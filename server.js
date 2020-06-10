@@ -24,6 +24,18 @@ console.log("Original test data " + testData);
 let fileName = "t3_" + uniqid();
 fs.writeFileSync(fileName, JSON.stringify(testData));
 
+// heroku doesn't leave a git repo, will have to clone
+// -b <branch> checkout just that branch
+// --depth 1  -> shallow clone, only get most recent 
+// <repo URL> <my directory> (e.g. github-source)
+
+// clone repo
+if (shell.exec('git clone -b heroku-git-trial https://github.com/johnlobster/tcc-test.git github-repo').code !== 0) {
+  shell.echo('Error: Git clone failed');
+  shell.exit(1);
+}
+
+
 // check that we are on the right branch
 if (shell.exec('git branch').code !== 0) {
   shell.echo('Error: Git branch failed');
