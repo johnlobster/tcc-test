@@ -9,11 +9,13 @@ require("dotenv").config(); // add variables in .env file to process.env
 const PORT = process.env.PORT || 3000;
 
 // check NODE_ENV
-console.log(`server: NODE_ENV ${process.env.NODE_ENV}`);
+const NODE_ENV = process.env.NODE_ENV || "development";
+
+console.log(`server: NODE_ENV ${NODE_ENV}`);
 // if NODE_ENV is undefined, that gets printed out before things start
 // crashing
 
-const ghToken = process.env.GH_OA_TOKEN | new Error("GH_OA_TOKEN not set");
+const ghToken = process.env.GH_OA_TOKEN || new Error("ENV variable GH_OA_TOKEN not set");
 
 const testData = {
   id1: "At the top",
@@ -30,23 +32,23 @@ console.log("Original test data " + testData);
 // <repo URL> <my directory> (e.g. github-source)
 
 // clone repo
-if (shell.exec(`git clone -b heroku-git-trial ${process.env.GH_OA_TOKEN}@github.com/johnlobster/tcc-test.git github-repo`).code !== 0) {
+if (shell.exec(`git clone -b heroku-git-trial https://github.com/johnlobster/tcc-test.git github-repo`).code !== 0) {
   shell.echo('Error: Git clone failed');
   shell.exit(1);
 } else {
   console.log("Successful clone to github-repo");
 }
 
-let lsArray = shell.ls('github-repo');
-console.log(`${lsArray.length} files in directory`);
-lsArray.forEach( (value, index) => {console.log(value);})
+// let lsArray = shell.ls('github-repo');
+// console.log(`${lsArray.length} files in directory`);
+// lsArray.forEach( (value, index) => {console.log(value);})
 
 const cdString = shell.cd("github-repo");
 console.log("Change directory to github-repo ShellString: " + cdString);
 
-let lsArray2 = shell.ls();
-console.log(`${lsArray2.length} files in directory`);
-lsArray2.forEach((value, index) => { console.log(value); })
+// let lsArray2 = shell.ls();
+// console.log(`${lsArray2.length} files in directory`);
+// lsArray2.forEach((value, index) => { console.log(value); })
 
 // check that we are on the right branch
 if (shell.exec('git branch').code !== 0) {
@@ -65,7 +67,7 @@ if (shell.exec('git add ' + fileName).code !== 0) {
 }
 
 // set up user name and email
-shell.exec("git config user.name 'John'");
+shell.exec("git config user.name 'johnlobster'");
 shell.exec("git config user.email 'JohnLobster@comcast.net'");
 
 const dateStamp=new Date();
@@ -74,17 +76,22 @@ const dsString = `${dateStamp.getHours()}${dateStamp.getMinutes()}${dateStamp.ge
 if (shell.exec(`git commit -m "Auto-commit ${dsString}"`).code !== 0) {
   shell.echo('Error: Git commit failed');
   shell.exit(1);
+} else {
+  console.log('Git commit succeeded');
+  console.log();
 }
 
-console.log();
-console.log("config file");
-const cFile = shell.cat(".git/config");
-console.log(cFile);
-console.log();
+// console.log();
+// console.log("config file");
+// const cFile = shell.cat(".git/config");
+// console.log(cFile);
+// console.log();
 
-if (shell.exec(`git push https://${process.env.GH_OA_TOKEN}@github.com/johnlobster/tcc-test.git`).code !== 0) {
+if (shell.exec(`git push https://${ghToken}@github.com/johnlobster/tcc-test.git`).code !== 0) {
   shell.echo('Error: Git push failed');
   shell.exit(1);
+} else {
+  console.log('Git push succeeded');
 }
 
 // git testing
