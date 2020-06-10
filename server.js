@@ -1,5 +1,9 @@
 const express = require("express");
 
+const fs = require('fs');
+var shell = require('shelljs');
+var uniqid = require('uniqid'); // use for testing
+
 const path = require("path");
 require("dotenv").config(); // add variables in .env file to process.env
 const PORT = process.env.PORT || 3000;
@@ -9,22 +13,36 @@ console.log(`server: NODE_ENV ${process.env.NODE_ENV}`);
 // if NODE_ENV is undefined, that gets printed out before things start
 // crashing
 
+const testData = {
+  id1: "At the top",
+  id2: "The second line",
+  id3: "More padding",
+  id4: "Even more padding"
+}
+console.log("Original test data " + testData);
+
+let fileName = "t3_" + uniqid();
+fs.writeFileSync(fileName, JSON.stringify(testData));
+
+// git testing
 
 // set up express
-const app = express();
+// const app = express();
 // Define middleware here
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
 
 // static files (css)
-app.use(express.static("."));
+// app.use(express.static("."));
 
 // serve author html (default)
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname,"authorIndex.html"));
-});
+// app.get("/*", (req, res) => {
+//   res.sendFile(path.join(__dirname,"authorIndex.html"));
+// });
 
 
-app.listen(PORT, () => {
-  console.log(`🌎 ==> API server listening on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`🌎 ==> API server listening on port ${PORT}`);
+// });
+
+console.log("Server ends here");
