@@ -24,6 +24,12 @@ console.log("Original test data " + testData);
 let fileName = "t3_" + uniqid();
 fs.writeFileSync(fileName, JSON.stringify(testData));
 
+// check that we are on the right branch
+if (shell.exec('git branch').code !== 0) {
+  shell.echo('Error: Git branch failed');
+  shell.exit(1);
+}
+
 // add explicitly because new file
 if (shell.exec('git add ' + fileName).code !== 0) {
   shell.echo('Error: Git add failed');
