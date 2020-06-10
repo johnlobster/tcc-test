@@ -74,7 +74,7 @@ if (shell.exec(`git commit -m "Auto-commit ${dsString}"`).code !== 0) {
   shell.exit(1);
 }
 
-if (shell.exec('git push origin').code !== 0) {
+if (shell.exec('git push https://github.com/johnlobster/tcc-test.git').code !== 0) {
   shell.echo('Error: Git push failed');
   shell.exit(1);
 }
