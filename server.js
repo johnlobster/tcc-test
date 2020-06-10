@@ -33,8 +33,15 @@ fs.writeFileSync(fileName, JSON.stringify(testData));
 if (shell.exec('git clone -b heroku-git-trial https://github.com/johnlobster/tcc-test.git github-repo').code !== 0) {
   shell.echo('Error: Git clone failed');
   shell.exit(1);
+} else {
+  console.log("Successful clone to github-repo");
 }
 
+let lsArray = shell.ls('github-repo');
+console.log(`${lsArray.length} files in directory`);
+lsArray.forEach( (value, index) => {console.log(value);})
+
+shell.cd("github-repo");
 
 // check that we are on the right branch
 if (shell.exec('git branch').code !== 0) {
