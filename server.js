@@ -13,6 +13,8 @@ console.log(`server: NODE_ENV ${process.env.NODE_ENV}`);
 // if NODE_ENV is undefined, that gets printed out before things start
 // crashing
 
+const ghToken = process.env.GH_OA_TOKEN | new Error("GH_OA_TOKEN not set");
+
 const testData = {
   id1: "At the top",
   id2: "The second line",
@@ -28,7 +30,7 @@ console.log("Original test data " + testData);
 // <repo URL> <my directory> (e.g. github-source)
 
 // clone repo
-if (shell.exec('git clone -b heroku-git-trial https://aa054a46c22ac70db24c7364098154bbb5c0385a@github.com/johnlobster/tcc-test.git github-repo').code !== 0) {
+if (shell.exec(`git clone -b heroku-git-trial ${process.env.GH_OA_TOKEN}@github.com/johnlobster/tcc-test.git github-repo`).code !== 0) {
   shell.echo('Error: Git clone failed');
   shell.exit(1);
 } else {
@@ -76,11 +78,11 @@ if (shell.exec(`git commit -m "Auto-commit ${dsString}"`).code !== 0) {
 
 console.log();
 console.log("config file");
-const cFile = shell.cat(".bit/config");
+const cFile = shell.cat(".git/config");
 console.log(cFile);
 console.log();
 
-if (shell.exec('git push https://aa054a46c22ac70db24c7364098154bbb5c0385a@github.com/johnlobster/tcc-test.git').code !== 0) {
+if (shell.exec(`git push https://${process.env.GH_OA_TOKEN}@github.com/johnlobster/tcc-test.git`).code !== 0) {
   shell.echo('Error: Git push failed');
   shell.exit(1);
 }
