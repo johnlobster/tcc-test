@@ -65,7 +65,7 @@ if (shell.exec('git add ' + fileName).code !== 0) {
 const dateStamp=new Date();
 console.log(dateStamp);
 const dsString = `${dateStamp.getHours()}${dateStamp.getMinutes()}${dateStamp.getSeconds()}`;
-if (shell.exec(`git commit -m "Auto-commit ${dsString}"`).code !== 0) {
+if (shell.exec(`git commit --author="A U John johnlobster@comcast.net" -m "Auto-commit ${dsString}"`).code !== 0) {
   shell.echo('Error: Git commit failed');
   shell.exit(1);
 }
