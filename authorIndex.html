@@ -13,16 +13,42 @@
     <h1>Sometimes you just need a title</h1>
     <div class="authorControls">
       <h4>Author controls</h4>
-      <button id="saveButton" class="authorButton">
+      <button id="saveButton" class="authorButton" onclick="postTest">
         Save
       </button>
       <h4>Something else</h4>
     </div>
     <div class="iframeBox">
-      <iframe src="http://localhost:5000/index.html" name="userIframe">
+      <iframe id="iframeId" src="http://localhost:5000/index.html" name="userIframe">
       </iframe>
     </div>
   </div>
 
+  <script>
+
+    const postTest = (iframeElement) => {
+        // don't use "*" in production
+        console.log("Send first message to iframe");
+        iframeElement.contentWindow.postMessage("First message", "*")
+      } 
+
+    const receiveMessage = (event) => {
+        event.preventDefault(); // Probably doesn't bubble up
+        console.log(`postMessage received from ${event.origin}`);
+        console.log(event.data);
+      }
+    window.onload = () => {
+      console.log("document loaded");
+      window.addEventListener("message", receiveMessage);
+      // test out postMessage
+      const iframeElement = document.getElementById("iframeId");
+      if (!iframeElement) {
+        console.log("Failed to find iframe element");
+      }
+      
+      postTest(iframeElement);
+    }
+    
+  </script>
 </body>
 </html>
