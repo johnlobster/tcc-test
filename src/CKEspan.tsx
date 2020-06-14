@@ -42,6 +42,24 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
     // })
   //})
 
+  const exitCKEditor = (): void=> {
+    console.log("Focus lost, so destroy editor");
+    let outData: string = editorInstance.getData();
+    console.log(`Output string: ${outData}`);
+    // Could strip out <p> at this point, probably a good idea
+    updateContent(outData);
+    testData[0].html = outData;
+    updateEditing(false);
+
+    editorInstance.destroy()
+      .then(()=> {
+        console.log("Editor destroyed");
+      })
+      .catch((err: any) => {
+        console.error("Editor crashed during destruction");
+        console.log(err);
+    });
+  }
   // straight inline version
   const handleClick = (event: React.MouseEvent): void => {
     if (! editing) {
@@ -49,8 +67,19 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
       .create(document.querySelector(`#${props.id}`))
       .then((ed: any) => {
         editorInstance = ed;
-        console.log("Loaded editor");
-        console.log(editorInstance);
+        console.log("Loaded editor, CKEspan");
+        editorInstance.ui.focusTracker.on('change:isFocused', (evt:any, data:any, isFocused:boolean) => {
+          console.log(`Editor focused: ${ isFocused }. `);
+        });
+        // exit editor when focus lost
+        editorInstance.ui.focusTracker.on('change:isFocused', (evt: any, data: any, isFocused: boolean) => {
+          if (! isFocused) {
+            exitCKEditor();
+          }
+        });
+        // focus on content so that don't need two clicks
+        editorInstance.editing.view.focus()
+        // console.log(editorInstance);
         updateEditing(true);
       })
       .catch((err:any) => {
@@ -58,9 +87,7 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
         console.log(err);
       });
     } else {
-      updateEditing(false);
-      console.log("removing editor instance")
-      editorInstance.destroy();
+      console.log("Bad if statement, should not have reached. Click should not have been caught if editing")
     }    
   }
 

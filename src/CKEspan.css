@@ -1,8 +1,7 @@
 .editorSpan {
-  border-style: solid;
-  border-color: transparent;
-  border-width: 6px;
-  border-radius: 3px;
+  outline-style: solid;
+  outline-color: transparent;
+  outline-width: 4px;
   display: inline;
 
 
@@ -12,7 +11,7 @@
   display: inline;
 }
 .editorHover:hover {
-  border-style: solid;
-  border-color: rgba(77, 96, 228, 0.65);
+  outline-style: solid;
+  outline-color: rgba(77, 96, 228, 0.75);
 
 }
