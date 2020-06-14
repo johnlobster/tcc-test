@@ -47,6 +47,13 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
     let outData: string = editorInstance.getData();
     console.log(`Output string: ${outData}`);
     // Could strip out <p> at this point, probably a good idea
+    const removeP = /^\s*<p>(.*)<\/p>$/;
+    const match: any = outData.match(removeP);
+    if (match) {
+      outData = match[1];
+    }
+    console.log(`Modified output string: ${outData}`);
+
     updateContent(outData);
     testData[0].html = outData;
     updateEditing(false);
@@ -60,9 +67,12 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
         console.log(err);
     });
   }
+
   // straight inline version
   const handleClick = (event: React.MouseEvent): void => {
     if (! editing) {
+      console.log(`Click event x=${event.clientX} y=${event.clientY}`);
+      console.log(event);
       InlineEditor
       .create(document.querySelector(`#${props.id}`))
       .then((ed: any) => {
@@ -70,6 +80,9 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
         console.log("Loaded editor, CKEspan");
         editorInstance.ui.focusTracker.on('change:isFocused', (evt:any, data:any, isFocused:boolean) => {
           console.log(`Editor focused: ${ isFocused }. `);
+          console.log(evt);
+          console.log(data);
+          console.log("----------");
         });
         // exit editor when focus lost
         editorInstance.ui.focusTracker.on('change:isFocused', (evt: any, data: any, isFocused: boolean) => {
@@ -78,7 +91,9 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
           }
         });
         // focus on content so that don't need two clicks
-        editorInstance.editing.view.focus()
+        editorInstance.editing.view.focus();
+        // Disable return key - good for span editing, not so good for block editing
+        // editorInstance.keystrokes.set('enter', ''); // didn't work ....
         // console.log(editorInstance);
         updateEditing(true);
       })
