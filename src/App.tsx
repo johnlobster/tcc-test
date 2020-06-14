@@ -1,7 +1,10 @@
 import React from 'react';
 import './App.css';
+import CKEspan from "./CKEspan";
 
 function inIframe():boolean { try { return window.self !== window.top; } catch (e) { return true; } }
+
+declare var InlineEditor: any;
 
 function App() {
 
@@ -11,7 +14,7 @@ function App() {
     event.preventDefault(); // Probably doesn't bubble up
     console.log(`IFRAME postMessage received from ${event.origin}`);
     console.log(event.data); // might be an object so would be nice to pretty print
-    
+
     // is console logging the source causing the issue ? Try sending a reply
     // console.log("IFRAME Reply to");
     // console.log(event.source);
@@ -27,6 +30,8 @@ function App() {
 
   // on mount, listen to postMessage event
   React.useEffect(() => {
+    // console.log( window.IamAVariable);
+
     console.log("IFRAME Mount App");
     if ( iFrame) {
       console.log("IFRAME Inside iframe, listen for postMessage event");
@@ -38,7 +43,27 @@ function App() {
     } else {
       return;
     }
-    })
+  });
+
+  // interface InlineEditor {}
+
+  // declare var window:any;
+  
+  
+  // const InlineEditor = window.InlineEditor;
+
+  
+  // // initialize editor
+  React.useEffect( () => {
+    InlineEditor
+      .create(document.querySelector('#editMe'))
+      .then(() => {
+        console.log("Loaded editor in App");
+      })
+      .catch(() => {
+        console.error("Editor crashed");
+      });
+  })
 
   return (
     <div>
@@ -50,6 +75,12 @@ function App() {
         <h1>Standalone</h1>
 
       )}
+      <p id="editMe">Initial content inside the react app</p>
+
+      <p>Padding</p>
+      
+      <h3><CKEspan id="someId" isFrame={iFrame} /></h3>
+
       <h3>Want to get the iframe to scroll</h3>
       <h1>I want to scroll</h1>
       <h1>I want to scroll</h1>
