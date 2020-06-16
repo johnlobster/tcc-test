@@ -1,55 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './CKEspan.css';
 import * as db from "./database";
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
+import "./globals";
 
-declare var InlineEditor: any; // loaded from cdn
-// declare var editorInstance: any; 
+declare var InlineEditor: any; // loaded from cdn as global
 
 interface SpanIf {
   id: string;
   isFrame: boolean;
 }
 
-interface dType {
-  id: string;
-  html: string;
-}
-let testData:dType[] = [
-  { id:"someId",html:"Time to say Hello"},
-  { id:"someOtherId", html:"Oh no,not again"}
-];
-
-
 const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
 
   let editorInstance:any = null;
-  const [content, updateContent] = React.useState( testData[0].html );
+  const [content, updateContent] = React.useState( appDb.getData("page1", props.id) );
   const [editing, updateEditing] = React.useState ( false);
-
-  //React.useEffect(()=> {
-    // InlineEditor
-    //   .create(document.querySelector(`#${props.id}`))
-    //   .then((ed: any) => {
-    //     editorInstance = ed;
-    //     console.log("Loaded editor");
-    //   })
-    //   .catch((err:any) => {
-    //     console.error("Editor crashed");
-    //     console.log(err);
-    //   });
-    // return( () => {
-    //   console.log("removing editor instance")
-    //   editorInstance.destroy();
-    // })
-  //})
-
-  const contextValue  = React.useContext(db.EditContext);
-  // this effect is just for debug
-  React.useEffect( () => {
-    console.log(`CKEspan: context data is id: ${contextValue.data.page1[1].id} html: ${contextValue.data.page1[1].html}`);
-  });
-  
 
   const exitCKEditor = (): void=> {
     console.log("Focus lost, so destroy editor");
@@ -62,9 +27,8 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
       outData = match[1];
     }
     console.log(`Modified output string: ${outData}`);
-    contextValue.updateData({ id: props.id, html: outData });
+    appDb.storeData( "page1", props.id, outData );
     updateContent(outData);
-    testData[0].html = outData;
     updateEditing(false);
 
     editorInstance.destroy()
@@ -115,35 +79,7 @@ const CKEspan:React.FunctionComponent<SpanIf> = (props) => {
     }    
   }
 
-  // decoupled version
-  // const handleClick = (event: React.MouseEvent): void => {
-  //   if (!editing) {
-  //     InlineEditor
-  //       .create(`${content}`)
-  //       .then((ed: any) => {
-  //         editorInstance = ed;
-  //         console.log("Loaded editor");
-  //         console.log(editorInstance);
-  //         const el = document.getElementById(props.id);
-  //         if (el) {
-  //           el.appendChild(editorInstance.ui.element);
-  //         } else {
-  //           new Error(`created detached inline editor, but couldn't find where to attach it (id = ${props.id})`);
-  //         }
-  //         updateEditing(true);
-
-  //       })
-  //       .catch((err: any) => {
-  //         console.error("Editor crashed");
-  //         console.log(err);
-  //       });
-  //   } else {
-  //     updateEditing(false);
-  //     console.log("removing editor instance")
-  //     editorInstance.destroy();
-  //   }
-  // }
-
+  // dummy for typescript
   const nohandleClick = (event: React.MouseEvent): void => {}
 
   return (

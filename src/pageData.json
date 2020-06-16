@@ -1,10 +1,11 @@
 {
-  "page1" : [ 
-    { "id" : "sillyId", "html" : "silly Text"},
-    {
-      "id": "someId",
-      "html": "Some Data"
-    }
-  ],
-  "page2" : []
+  "page1" : {
+    "sillyId": "silly Text",
+    "id": "someInfo",
+    "anotherId": "Some Data",
+    "someId": ""
+    },
+  "page2" : {
+    "p2Id": "p2Data"
+  }
 }

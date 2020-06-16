@@ -2,40 +2,50 @@ import React from 'react';
 import './App.css';
 import CKEspan from "./CKEspan";
 import * as db from "./database";
-import dbData from "./pageData.json";
+import initialData from "./pageData.json";
+import "./globals";
 
 function inIframe():boolean { try { return window.self !== window.top; } catch (e) { return true; } }
 
 // declare var InlineEditor: any;
 
-function App() {
+console.log("Initial data");
+console.log(initialData);
 
-  let dataBase : db.dbType = dbData;  
+const tmpData: db.dbType = {
+  page1: {
+    "someId": "First editor data",
+    "someOtherId": "Second editor data",
+
+  }
+}
+
+
+function App() {
+  // initialize database
+  window.appDb = db.DatabaseType.create(tmpData);
 
   const [iFrame , updateIFrame] = React.useState( inIframe() ); // boolean
-
-  const databaseUpdater: db.dbUpdateFnType =( newData:db.entryType):void => {
-    console.log(`data base updater new data id: ${newData.id} html: ${newData.html}`);
-  }
-
   
-  const receiveMessage = (event:any) => {
+  const receiveMessage = (event:any):void => {
     event.preventDefault(); // Probably doesn't bubble up
     console.log(`IFRAME postMessage received from ${event.origin}`);
     console.log(event.data); // might be an object so would be nice to pretty print
-
-    // is console logging the source causing the issue ? Try sending a reply
-    // console.log("IFRAME Reply to");
-    // console.log(event.source);
 
     // reply
     event.source.postMessage(`A polite reply to ${event.data}`, "*");
 
   }
 
-  // const sendMessage = () => {
+  const log = (event: React.MouseEvent): void => {
+    event.stopPropagation();
+    let dbase: db.dbType = appDb.save();
+    console.log(dbase);
+  }
 
-  // }
+  const write = (event: React.MouseEvent): void => {
+    console.log("App: write");
+  }
 
   // on mount, listen to postMessage event
   React.useEffect(() => {
@@ -54,7 +64,7 @@ function App() {
     }
   });
 
-
+  
   return (
     <div>
       <h1>The web app</h1>
@@ -67,12 +77,15 @@ function App() {
       )}
       <p id="editMe">Initial content inside the react app</p>
 
+      <button onClick={log}>Console log database</button>
+      <button onClick={write}>Save to file</button>
+
       <p>Padding</p>
       
-      <db.EditContext.Provider 
-        value={{data: dataBase, updateData: databaseUpdater}}>
-        <h3><CKEspan id="someId" isFrame={iFrame} /></h3>
-      </db.EditContext.Provider>
+      
+      <h3><CKEspan id="someId" isFrame={iFrame} /></h3>
+
+      <h3><CKEspan id="someOtherId" isFrame={iFrame} /></h3>
 
       <h3>Want to get the iframe to scroll</h3>
       <h1>I want to scroll</h1>

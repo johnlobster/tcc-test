@@ -18,13 +18,21 @@ export class DatabaseType {
     this.theData = Object.assign({}, initData);
 
   }
-  // let theData: dbType = {};
 
-  static create = (initData : dbType) => {
-    const db:DatabaseType = new DatabaseType(initData);
-    return(db);
+  isDbTYpe = (test:dbType):boolean => {
+    let matches:boolean = false;
+    if (typeof(test) !== "object") {
+      matches=false;
+    }
+    return matches;
   }
 
+  static create = (initData : dbType) => {
+    // check incoming data
+    return (new DatabaseType(initData));
+  }
+
+  
   // load new data into the database
   load = (newData:dbType):void =>  {
     // could check for valid data
