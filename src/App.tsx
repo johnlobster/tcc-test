@@ -32,8 +32,14 @@ function App() {
     console.log(`IFRAME postMessage received from ${event.origin}`);
     console.log(event.data); // might be an object so would be nice to pretty print
 
-    // reply
-    event.source.postMessage(`A polite reply to ${event.data}`, "*");
+    if (event.data === "Ping") {
+      event.source.postMessage(`Pong`, "*");
+    } else if (event.data === "Save") {
+      const dataString: string = JSON.stringify(window.appDb.save()); 
+      console.log(dataString);
+      event.source.postMessage(dataString, "*");
+
+    }
 
   }
 
@@ -50,8 +56,7 @@ function App() {
   // on mount, listen to postMessage event
   React.useEffect(() => {
     // console.log( window.IamAVariable);
-
-    console.log("IFRAME Mount App");
+    console.log(`IFRAME Mount App iFrame = ${iFrame}`);
     if ( iFrame) {
       console.log("IFRAME Inside iframe, listen for postMessage event");
       window.addEventListener("message", receiveMessage);

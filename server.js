@@ -100,6 +100,33 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.post("/write", (req, res) => {
+  console.log(`Object after express`);
+  console.log(req.body);
+  // let allKeys = objIn.entries();
+  // console.log(`Entries - ${allKeys}`);
+  let writeOk = true;
+  for (const [pageName, pageData] of Object.entries(req.body)) {
+    // const fData = JSON.stringify(pageData);
+    let fileName = `src/data-${pageName}.json`;
+    console.log(`Write file ${fileName}`)
+    console.log(`Type of pageData is ${typeof(pageData)}`)
+    const jsonData = JSON.stringify(pageData)
+    console.log(`Data typData: ${jsonData}`);
+    try{fs.writeFileSync(fileName, jsonData);}
+    catch {
+      console.log("File write failed");
+      writeOk = false;
+    }
+  }
+
+  if (writeOk) {
+    res.status(200).end();
+  } else {
+    res.status(204).end();
+  }
+  
+})
 // static files (css or js etc.)
 app.use(express.static("."));
 
@@ -113,5 +140,3 @@ app.get("/*", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🌎 ==> API server listening on port ${PORT}`);
 });
-
-console.log("Server ends here");
