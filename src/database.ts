@@ -10,7 +10,7 @@ export interface dbType {
 }
 
 export class DatabaseType {
-
+  // All the data in the database
   private theData: dbType;
 
   constructor(initData: dbType) {
@@ -19,10 +19,25 @@ export class DatabaseType {
 
   }
 
-  isDbTYpe = (test:dbType):boolean => {
-    let matches:boolean = false;
-    if (typeof(test) !== "object") {
+  // The data can acquired from an API in JSON format, so need to check
+  // for a valid database before creating, even using typescript
+  isDbType = (testMe:dbType):boolean => {
+    let matches:boolean = true;
+    if (typeof(testMe) !== "object") {
       matches=false;
+    } else {
+      for( const key of Object.keys(testMe)) {
+        // careful to distinguish between an array and object
+        if( (typeof(testMe[key])!== "object") || (testMe[key].length) ){
+          matches=false;
+        } else  {
+          for( const subKey of Object.keys(testMe[key])) {
+            if (typeof (testMe[key][subKey]) !== "string") {
+              matches = false;
+            }
+          }
+        }
+      }
     }
     return matches;
   }

@@ -41,12 +41,28 @@ const receiveMessage = (event) => {
   }
 }
 
-const iframeElement = document.getElementById("iframeId");
+let iframeElement; 
 
 window.onload = () => {
       console.log("Author: document loaded");
       window.addEventListener("message", receiveMessage);
-      // test out postMessage
+      // insert iframe, could be done with environment variable
+  const div = document.getElementById("iframeContainer");
+       
+      if (div) {
+        const el = document.createElement("IFRAME");
+        // el.setAttribute("src", "http://localhost:5000")
+        el.setAttribute("src", "file:///build.html")
+
+        el.setAttribute("id", "iframeId")
+        el.setAttribute("name", "userIframe")
+        // div.appendChild(el)
+        
+      }
+      else {
+        console.log("Author: Failed to create iframe element")
+      }
+  iframeElement = document.getElementById("iframeId")
       if (!iframeElement) {
         console.log("Author: Failed to find iframe element");
       } else {
