@@ -69,6 +69,54 @@ function App() {
     }
   });
 
+  // const testEnvVar = () => {
+  //   let isAuthor:boolean = false;
+  //   try {
+  //     if (process.env.REACT_APP_BUILD_MODE === "author") {
+  //       isAuthor = true;
+        
+  //     }
+  //   } catch {
+  //     console.log("Reference to env variable caused type error");
+  //   }
+  //   if( isAuthor) {
+  //     return (
+  //       <h2>Author build</h2>
+  //     );  
+  //   } else {
+  //     return (
+  //       <h2>Web build</h2>
+  //     );
+  //   }
+  // }
+
+  // const testEnvVar = () => {
+  //     if (process.env.REACT_APP_BUILD_MODE === "author") {
+  //       return (
+  //         <h2>Author build</h2>
+  //       );
+  //     } else {
+  //       return (
+  //         <h2>Web build</h2>
+  //       );
+  //     }
+  // }
+
+  const testEnvVar = () => {
+    if (process.env.REACT_APP_BUILD_MODE === "author") {
+      return (
+        <h2>Author build</h2>
+      );
+    } else {
+      return (
+        <h2>Web build</h2>
+      );
+    }
+  }
+      
+      
+    
+  
   
   return (
     <div>
@@ -82,6 +130,9 @@ function App() {
       )}
       <p id="editMe">Initial content inside the react app</p>
 
+      {testEnvVar()}
+
+      
       <button onClick={log}>Console log database</button>
       <button onClick={write}>Save to file</button>
 

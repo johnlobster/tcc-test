@@ -15,6 +15,28 @@ This was tricky to debug, but embarrassingly simple when I realized that there w
 
 ### 2 Check github can be accessed by server running on heroku
 
+### Using REACT_APP_VAR
+
+`REACT_APP_MY_VARIABLE_NAME`
+
+For `create-react-app build` the environment variable must be set to something in every build, otherwise the code gets passed into the client js where there is a type 
+violation because `process.env.REACT_APP_VAR` doesn't exist. 
+
+Also, create-react-app doesn't optimize inside JSX, so can't use
+``` jsx
+{
+  (window.process.env.REACT_APP_BUILD === "author") ? 
+    (<h2>Author build</h2>) : (<h2>Client build</h2>)
+}
+```
+in the jsx part of a component definition, has to be done as a function
+
+My motivation was to supply two different builds, with more code in the "author" mode
+
+If you don't know this, it's hard to debug what's happening. This is not an issue
+if set in `.env` file for every build version, but if you forget the `.env` for some
+reason, then you will have issues
+
 ### Testing
 It was hard to migrate from built in Jest to mocha/chai
 
