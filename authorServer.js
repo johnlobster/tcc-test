@@ -97,6 +97,18 @@ console.log("Original test data " + testData);
 // set up express
 const app = express();
 // Define middleware here
+
+// log requests
+app.use((req,res,next) => {
+  // console.log();
+  console.log(`${req.method} HOST ${req.headers.host} URL ${req.url}`);
+  // let allHeaders = "";
+  // for (const header of Object.keys(req.headers)) {
+  //   allHeaders += `  ${header} : ${req.headers[header]}`;
+  // }
+  // console.log(allHeaders);
+  next();
+})
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
